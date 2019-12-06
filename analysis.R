@@ -1,0 +1,1 @@
+data <- read.csv("data/HerbicideData.csv", stringsAsFactors = F)
