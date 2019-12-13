@@ -22,10 +22,22 @@ T33herb <- filter(Triclopyr,
                   Treatment....herbicide == "33%")
 
 #Water T-test
-wildType <- (filter(Twater,ï..Triclopyr == "Wild type"))
-test2 <- as.double(gsub('.{1}$', '', wildType[ , "Percent.necrosis"]))
-# wildmean <- mean(wildType[, "Percent.necrosis"], na.rm = TRUE)
+#mean for WT
+wildT <- (filter(Twater,ï..Triclopyr == "Wild type"))
+cwildT <- as.double(gsub('.{1}$', '', wildT[ , "Percent.necrosis"]))
+wildMean <- mean(cwildT, na.rm = TRUE)
 
+#mean for VD3
+VD3T <- (filter(Twater,ï..Triclopyr == "VD3"))
+cVD3T <- as.double(gsub('.{1}$', '', VD3T[ , "Percent.necrosis"]))
+VD3Mean <- mean(cwildT, na.rm = TRUE)
+
+#T-test
+
+print(t.test(cwildT, cVD3T,
+       alternative = c("two.sided", "less", "greater"),
+       mu = 0, paired = FALSE, var.equal = FALSE,
+       conf.level = 0.95))
 
 
 Glyphosate <- select(data,
