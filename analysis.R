@@ -8,10 +8,6 @@ Triclopyr <- select(data,
                     Treatment....herbicide,
                     Percent.necrosis)
 
-test <- Triclopyr[ , "Percent.necrosis"]
-test2 <- as.double(gsub('.{1}$', '', test))
-
-
 Twater <- filter(Triclopyr,
                  Treatment....herbicide == "0%")
 Tundiluted <- filter(Triclopyr,
@@ -21,62 +17,96 @@ T43herb <- filter(Triclopyr,
 T33herb <- filter(Triclopyr,
                   Treatment....herbicide == "33%")
 
-#Water T-test
-#WT
-wildTwater <- as.double(gsub('.{1}$', '',
-          filter(Twater,ï..Triclopyr == "Wild type")[ , "Percent.necrosis"]))
-#VD3
-VD3Twater <- as.double(gsub('.{1}$', '', 
-         filter(Twater,ï..Triclopyr == "VD3")[ , "Percent.necrosis"]))
-
-#T-test
-print(t.test(wildTwater, VD3Twater,
-             mu = 0,
-             alternative = "two.sided",
-             paired = FALSE, var.equal = FALSE,
-             conf.level = 0.95))
-
-#T test by hand
-tStat <- (mean(wildTwater) - mean(VD3Twater)) /
-  sqrt((sd(wildTwater)/length(wildTwater)) + (sd(VD3Twater)/length(VD3Twater)))
-
-df <- (sd(wildTwater)^2/length(wildTwater) + sd(VD3Twater)^2/length(VD3Twater))^2 /
-  (((sd(wildTwater)^2/length(wildTwater))^2 / (length(wildTwater)-1)) +
-     ((sd(VD3Twater)^2/length(VD3Twater))^2 / (length(VD3Twater)-1)))
-
-
-alpha = .05 
-t.half.alpha = qt(1 - alpha/2, df = df)
-confidenceInt <- c(-t.half.alpha, t.half.alpha) 
-print(confidenceInt)
-if (tStat > confidenceInt[1] && tStat < confidenceInt[2]) {
-  print("Fail to reject null hypothesis")
-} else {
-  print("Reject null hypothesis")
-}
-
-
-
-
-#33% Herbicide 
-#WT
-wildT33 <- as.double(gsub('.{1}$', '',
-                         filter(T33herb,ï..Triclopyr == "Wild type")[ , "Percent.necrosis"]))
-#VD3
-VD3T33 <- as.double(gsub('.{1}$', '', 
-                        filter(T33herb,ï..Triclopyr == "VD3")[ , "Percent.necrosis"]))
-#T-test
-
-
-
-
-
-
-
-
 Glyphosate <- select(data,
                      Glyphosate,
                      Rep.1,
                      Treatment....herbicide.1,
                      Percent.necrosis.1
-                     )
+)
+Gwater <- filter(Glyphosate,
+                 Treatment....herbicide.1 == "0%")
+Gundiluted <- filter(Glyphosate,
+                     Treatment....herbicide.1 == "100%")
+G1herb <- filter(Glyphosate,
+                  Treatment....herbicide.1 == "1%")
+G33herb <- filter(Glyphosate,
+                  Treatment....herbicide.1 == "33%")
+
+
+
+# T test function for Tric
+tric_t_tester <- function(herb_level) {
+  #Water T-test
+  #WT
+  wildT <- as.double(gsub('.{1}$', '',
+                filter(herb_level,ï..Triclopyr == "Wild type")[ , "Percent.necrosis"]))
+  wildT <- wildT[!is.na(wildT)] 
+  #VD3
+  VD3T <- as.double(gsub('.{1}$', '', 
+               filter(herb_level,ï..Triclopyr == "VD3")[ , "Percent.necrosis"]))
+  VD3T <- VD3T[!is.na(VD3T)]
+  #Calculations
+  tStat <- (mean(wildT) - mean(VD3T)) /
+    sqrt((sd(wildT)/length(wildT)) + (sd(VD3T)/length(VD3T)))
+  
+  df <- (sd(wildT)^2/length(wildT) + sd(VD3T)^2/length(VD3T))^2 /
+    (((sd(wildT)^2/length(wildT))^2 / (length(wildT)-1)) +
+       ((sd(VD3T)^2/length(VD3T))^2 / (length(VD3T)-1)))
+  
+  
+  alpha = .05 
+  t.half.alpha = qt(1 - alpha/2, df = df)
+  confidenceInt <- c(-t.half.alpha, t.half.alpha) 
+  print(confidenceInt)
+  if (tStat > confidenceInt[1] && tStat < confidenceInt[2]) {
+    print("Fail to reject null hypothesis")
+  } else {
+    print("Reject null hypothesis")
+  }
+}
+
+glyph_t_tester <- function(herb_level) {
+  #WT
+  wildT <- as.double(gsub('.{1}$', '',
+                     filter(herb_level,Glyphosate == "Wild type")[ , "Percent.necrosis.1"]))
+  wildT <- wildT[!is.na(wildT)] 
+  #VD3
+  VD3T <- as.double(gsub('.{1}$', '', 
+                         filter(herb_level,Glyphosate == "VD3")[ , "Percent.necrosis.1"]))
+  VD3T <- VD3T[!is.na(VD3T)]
+  #Calculations
+  tStat <- (mean(wildT) - mean(VD3T)) /
+    sqrt((sd(wildT)/length(wildT)) + (sd(VD3T)/length(VD3T)))
+  
+  df <- (sd(wildT)^2/length(wildT) + sd(VD3T)^2/length(VD3T))^2 /
+    (((sd(wildT)^2/length(wildT))^2 / (length(wildT)-1)) +
+       ((sd(VD3T)^2/length(VD3T))^2 / (length(VD3T)-1)))
+  
+  
+  alpha = .05 
+  t.half.alpha = qt(1 - alpha/2, df = df)
+  confidenceInt <- c(-t.half.alpha, t.half.alpha) 
+  print(confidenceInt)
+  if (tStat > confidenceInt[1] && tStat < confidenceInt[2]) {
+    print("Fail to reject null hypothesis")
+  } else {
+    print("Reject null hypothesis")
+  }
+}
+
+
+
+# All T-Tests
+tric_t_tester(Twater)
+tric_t_tester(Tundiluted)
+tric_t_tester(T43herb)
+tric_t_tester(T33herb)
+
+
+glyph_t_tester(Gundiluted)
+glyph_t_tester(G1herb)
+glyph_t_tester(G33herb)
+
+
+
+
