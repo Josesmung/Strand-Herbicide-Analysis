@@ -1,5 +1,5 @@
 library(dplyr)
-
+library(tidyr)
 data <- read.csv("data/HerbicideData.csv", stringsAsFactors = F)
 
 Triclopyr <- select(data,
@@ -40,6 +40,7 @@ tric_t_tester <- function(herb_level) {
   #WT
   wildT <- as.double(gsub('.{1}$', '',
                 filter(herb_level,ï..Triclopyr == "Wild type")[ , "Percent.necrosis"]))
+  print(wildT)
   wildT <- wildT[!is.na(wildT)] 
   #VD3
   VD3T <- as.double(gsub('.{1}$', '', 
@@ -106,6 +107,41 @@ tric_t_tester(T33herb)
 glyph_t_tester(Gundiluted)
 glyph_t_tester(G1herb)
 glyph_t_tester(G33herb)
+
+
+
+# ANOVA test: Is there a difference between Tric and Glyph necrotic levels at 
+# same herbicide levels?
+# 2 way anova
+
+# dependent (measurement) - percent necrosis 
+# indepedendent (nominal variables) - plant type (VD3, Wild), herbicide concentration
+anova_data <- read.csv("data/AnovaData.csv", stringsAsFactors = F)
+
+
+tric_nec <- as.double(gsub('.{1}$', '', 
+                      filter(anova_data, Plant == "Triclopyr")[ , "Percent.necrosis"]))
+
+tric_type <- filter(anova_data, Plant == "Triclopyr")[, "Type"]
+tric_herb_concentration <- as.integer(gsub('.{1}$', '', 
+                          filter(anova_data, Plant == "Triclopyr")[, "Treatment....herbicide"]))
+
+
+
+
+glyph_nec <- as.double(gsub('.{1}$', '', 
+                           filter(anova_data, Plant == "Glyphosate")[ , "Percent.necrosis"]))
+
+glyph_type <- filter(anova_data, Plant == "Glyphosate")[, "Type"]
+glyph_herb_concentration <- as.integer(gsub('.{1}$', '', 
+                            filter(anova_data, Plant == "Glyphosate")[, "Treatment....herbicide"]))
+
+
+print("Triclopyr ANOVA results")
+print(summary(aov(tric_nec ~ tric_type + tric_herb_concentration)))
+print("")
+print("Glyphosate ANOVA results")
+print(summary(aov(glyph_nec ~ glyph_type + glyph_herb_concentration)))
 
 
 

@@ -37,3 +37,7 @@ P-value: -4.302537  4.302537
 **Undiluted Herbicide**   
 P-value: -3.177676  3.177676    
  "Reject null hypothesis"   
+
+
+## ANOVA results
+![Anova Results](Data/ANOVAcapture.png)
