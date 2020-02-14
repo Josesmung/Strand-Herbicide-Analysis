@@ -1,5 +1,6 @@
 library(dplyr)
 library(tidyr)
+library(agricolae)
 data <- read.csv("data/HerbicideData.csv", stringsAsFactors = F)
 
 Triclopyr <- select(data,
@@ -137,11 +138,34 @@ glyph_herb_concentration <- as.integer(gsub('.{1}$', '',
                             filter(anova_data, Plant == "Glyphosate")[, "Treatment....herbicide"]))
 
 
+tric_df <- data.frame(
+  type = tric_type,
+  concentration = tric_herb_concentration,
+  necrosis = tric_nec
+)
+
+glyph_df <- data.frame(
+  type = glyph_type,
+  concentration = glyph_herb_concentration,
+  necrosis = glyph_nec
+)
+
+glyph_df$concentration <- as.factor(glyph_df$concentration)
+tric_df$concentration <- as.factor(tric_df$concentration)
+
 print("Triclopyr ANOVA results")
-print(summary(aov(tric_nec ~ tric_type + tric_herb_concentration)))
+tric_aov <- aov(necrosis ~ type + concentration, data = tric_df)
+print(summary(tric_aov))
+print("")
+print("Triclopyr Tukey Results results")
+print(TukeyHSD(tric_aov))
+#print(model.tables(tric_aov, "mean"))
 print("")
 print("Glyphosate ANOVA results")
-print(summary(aov(glyph_nec ~ glyph_type + glyph_herb_concentration)))
+glyph_aov <- aov(necrosis ~ type + concentration, data = glyph_df)
+print(summary(glyph_aov))
+
+
 
 
 
