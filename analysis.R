@@ -1,6 +1,8 @@
 library(dplyr)
 library(tidyr)
 library(agricolae)
+library(TOSTER)
+
 data <- read.csv("data/HerbicideData.csv", stringsAsFactors = F)
 
 Triclopyr <- select(data,
@@ -163,7 +165,55 @@ print(TukeyHSD(tric_aov))
 print("")
 print("Glyphosate ANOVA results")
 glyph_aov <- aov(necrosis ~ type + concentration, data = glyph_df)
+
+
 print(summary(glyph_aov))
+
+#Glyphosate Equivelence Testing
+#TOSTs on Glyphosate for WT vs T at each concentration
+# 0 ommitted due to NA 
+par(mfrow=c(1, 3)) 
+
+
+one_conc <- filter(glyph_df, concentration == 1)
+print(TOSTtwo.raw(
+  m1 = mean((filter(one_conc, type == "Wild type"))$necrosis),
+  m2 = mean((filter(one_conc, type == "VD3"))$necrosis),
+  sd1 = sd((filter(one_conc, type == "Wild type"))$necrosis), 
+  sd2 = sd((filter(one_conc, type == "VD3"))$necrosis),
+  n1 = 4, n2 = 4,
+  low_eqbound = -theta,
+  high_eqbound = theta,
+  alpha = 0.05,
+  var.equal = TRUE,
+  plot = TRUE
+))
+thirty_conc <- filter(glyph_df, concentration == 33) 
+print(TOSTtwo.raw(
+  m1 = mean((filter(thirty_conc, type == "Wild type"))$necrosis),
+  m2 = mean((filter(thirty_conc, type == "VD3"))$necrosis),
+  sd1 = sd((filter(thirty_conc, type == "Wild type"))$necrosis), 
+  sd2 = sd((filter(thirty_conc, type == "VD3"))$necrosis),
+  n1 = 4, n2 = 3,
+  low_eqbound = -theta,
+  high_eqbound = theta,
+  alpha = 0.05,
+  var.equal = TRUE,
+  plot = TRUE
+))
+hundred_conc <- filter(glyph_df, concentration == 100)
+print(TOSTtwo.raw(
+  m1 = mean((filter(hundred_conc, type == "Wild type"))$necrosis),
+  m2 = mean((filter(hundred_conc, type == "VD3"))$necrosis),
+  sd1 = sd((filter(hundred_conc, type == "Wild type"))$necrosis), 
+  sd2 = sd((filter(hundred_conc, type == "VD3"))$necrosis),
+  n1 = 4, n2 = 4,
+  low_eqbound = -theta,
+  high_eqbound = theta,
+  alpha = 0.05,
+  var.equal = TRUE,
+  plot = TRUE
+))
 
 
 
