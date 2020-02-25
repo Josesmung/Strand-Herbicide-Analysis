@@ -10,7 +10,7 @@ Package Info: https://cran.r-project.org/web/packages/TOSTER/TOSTER.pdf
 Package Info: https://cran.r-project.org/web/packages/dplyr/dplyr.pdf        
 `install.packages("dplyr")`
 
-## Initial T-tests 
+## Initial T-tests
 A T-test was done for each VD3 and Wild Type at each level provided for both Triclopyr and Glyphosate plants.   
 
 Null hypothesis: No difference between VD3 and Wild Type necrotic level
@@ -51,16 +51,16 @@ P-value: -3.177676  3.177676
 
 ## ANOVA results
 **Triclopyr**
-![Anova Results](Data/TricANOVA.png)
+![Tric Anova Results](data/TricANOVA.png)
 
 **Glyphosate**
-![Anova Results](Data/GlyphANOVA.png)
+![Glyph Anova Results](data/GlyphANOVA.png)
 
 
 ## Tukey Test for Tricoplyr:
 A Tukey test shows which specific groups’ means (compared with each other) are different or significant. This is done because an ANOVA test alone is limited in providing detailed insights between different treatments/groups. R has a built in Tukey function called `TukeyHSD`. The `TukeyHSD` function in R returns the p-values for each level of mean comparison. Here is the table that is returned using that function.
 
-![Tukey Results](Data/TukeyResults.png)
+![Tukey Results](data/TukeyResults.png)
 
 
 ## Equivalence Testing for Glyphosate
@@ -88,4 +88,4 @@ p-value lower bound: 0.948
 p-value upper bound: 0.048    
 The equivalence test was *non-significant*, t(6) = -1.912, p = 0.948, given equivalence bounds of -0.223 and 0.223 (on a raw scale) and an alpha of 0.05
 
-![Tukey Results](Data/GlyphEquivTable.png)
+![Tukey Results](data/GlyphEquivTable.png)
