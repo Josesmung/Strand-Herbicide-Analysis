@@ -50,10 +50,10 @@ P-value: -3.177676  3.177676
 
 
 ## ANOVA results
-**Triclopyr**
+**Triclopyr**   
 ![Tric Anova Results](data/TricANOVA.png)
 
-**Glyphosate**
+**Glyphosate**    
 ![Glyph Anova Results](data/GlyphANOVA.png)
 
 
