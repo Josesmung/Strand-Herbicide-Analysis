@@ -173,7 +173,7 @@ print(summary(glyph_aov))
 #TOSTs on Glyphosate for WT vs T at each concentration
 # 0 ommitted due to NA 
 par(mfrow=c(1, 3)) 
-
+theta <- log(x = 1.25)
 
 one_conc <- filter(glyph_df, concentration == 1)
 print(TOSTtwo.raw(
