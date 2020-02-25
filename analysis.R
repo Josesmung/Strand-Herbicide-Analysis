@@ -1,6 +1,4 @@
 library(dplyr)
-library(tidyr)
-library(agricolae)
 library(TOSTER)
 
 data <- read.csv("data/HerbicideData.csv", stringsAsFactors = F)
